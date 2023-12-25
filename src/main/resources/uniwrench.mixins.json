@@ -4,6 +4,7 @@
   "package": "net.danygames2014.uniwrench.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "PlayerInventoryMixin"
   ],
   "server": [
   ],

@@ -1,1 +1,5 @@
 item.universal_wrench.name=Universal Wrench
+
+wrenchmode.wrench.name=Wrench
+wrenchmode.texture.name=Texture
+wrenchmode.rotation.name=Rotation

@@ -15,7 +15,8 @@
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
-      "net.danygames2014.uniwrench.init.ItemListener"
+      "net.danygames2014.uniwrench.init.ItemListener",
+      "net.danygames2014.uniwrench.init.BlockListener"
     ],
     "stationapi:event_bus_client": [
     ],
