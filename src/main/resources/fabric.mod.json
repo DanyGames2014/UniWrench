@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "uniwrench",
+  "version": "${version}",
+
+  "name": "Universal Wrench",
+  "description": "This adds an universal wrench",
+  "authors": [
+    "DanyGames2014"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/uniwrench/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+      "net.danygames2014.uniwrench.init.ItemListener"
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "uniwrench.mixins.json"
+  ],
+
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}
