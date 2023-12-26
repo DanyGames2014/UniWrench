@@ -29,13 +29,11 @@ jobs:
     - name: Create Built JAR Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: uniwrench.zip
         path: |
-          path/to/your/artifacts/uniwrench-*.jar
-          !path/to/your/artifacts/uniwrench-*-sources.jar
+          build/libs/uniwrench-*.jar
+          !build/libs/uniwrench-*-sources.jar
 
     - name: Create Sources Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: uniwrench.zip
         path: build/libs/uniwrench-*-sources.jar
