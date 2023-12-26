@@ -36,7 +36,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     }
 
     public WrenchMode getWrenchMode(ItemStack stack){
-        return wrenchModes.get(readMode(stack));
+        return ((WrenchBase)stack.getItem()).wrenchModes.get(readMode(stack));
     }
 
     public void setWrenchMode(ItemStack stack, int mode){
@@ -72,14 +72,14 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     public String[] getTooltip(ItemStack stack, String originalTooltip) {
         return new String[]{
           originalTooltip,
-          "Mode : " + wrenchModes.get(readMode(stack)).getTranslatedName()
+          "Mode : " + getWrenchMode(stack).getTranslatedName()
         };
     }
 
     // NBT
     public int readMode(ItemStack itemStack) {
         NbtCompound nbt = ((StationItemNbt) itemStack).getStationNbt();
-        return MathUtil.clamp(nbt.getInt("wrench_mode"), 0, wrenchModes.size()-1);
+        return MathUtil.clamp(nbt.getInt("wrench_mode"), 0, ((WrenchBase)itemStack.getItem()).wrenchModes.size()-1);
     }
 
     public void writeMode(ItemStack itemStack, int mode) {
