@@ -27,13 +27,13 @@ jobs:
         ./gradlew build
            
     - name: Create Built JAR Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         paths: |
           build/libs/uniwrench-*.jar
           !build/libs/uniwrench-*-sources.jar
 
     - name: Create Sources Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         paths: build/libs/uniwrench-*-sources.jar
