@@ -21,8 +21,7 @@ public abstract class PlayerInventoryMixin {
 
     @Inject(method = "method_692", at = @At("HEAD"), cancellable = true)
     public void wrenchScroll(int scrollDirection, CallbackInfo ci) {
-        if (this.getSelectedItem() != null && this.getSelectedItem().itemId == ItemListener.universalWrench.id && player.method_1373()) {
-            WrenchBase wrench = ((WrenchBase) this.getSelectedItem().getItem());
+        if (this.getSelectedItem() != null && this.getSelectedItem().getItem() instanceof WrenchBase wrench && player.method_1373()) {
             wrench.cycleWrenchMode(this.getSelectedItem(), MathUtil.clamp(scrollDirection, -1, 1), this.player);
 
             ci.cancel();
