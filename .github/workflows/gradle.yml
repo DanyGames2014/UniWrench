@@ -29,5 +29,5 @@ jobs:
     - name: Create Artifact
       uses: actions/upload-artifact@v4
       with:
-        path: build/libs/uniwrench-*.jar
+        path: build/libs/*.jar
         compression-level: 0
