@@ -1,5 +1,6 @@
 package net.danygames2014.uniwrench.init;
 
+import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.event.UniversalWrenchModeEvent;
 import net.danygames2014.uniwrench.item.UniversalWrench;
 import net.mine_diver.unsafeevents.listener.EventListener;
@@ -18,7 +19,11 @@ public class ItemListener {
 
     @EventListener
     public void registerWrench(ItemRegistryEvent event){
+        WrenchMode.MODE_WRENCH = new WrenchMode(MOD_ID.id("wrench"));
+        WrenchMode.MODE_ROTATE  = new WrenchMode(MOD_ID.id("rotate"));
+
         universalWrench = new UniversalWrench(MOD_ID.id("universal_wrench")).setTranslationKey(MOD_ID,"universal_wrench");
+
         StationAPI.EVENT_BUS.post(new UniversalWrenchModeEvent((UniversalWrench) universalWrench));
     }
 }
