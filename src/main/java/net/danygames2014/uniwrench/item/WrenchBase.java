@@ -26,20 +26,20 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     }
 
     // Wrench Modes
-    public static void cycleWrenchMode(ItemStack itemStack, int direction){
+    public void cycleWrenchMode(ItemStack itemStack, int direction){
         setWrenchMode(itemStack, MathUtil.clamp(readMode(itemStack)+direction, 0, getWrenchModes(itemStack).size()-1));
     }
 
-    public static void cycleWrenchMode(ItemStack itemStack, int direction, PlayerEntity player){
+    public void cycleWrenchMode(ItemStack itemStack, int direction, PlayerEntity player){
         cycleWrenchMode(itemStack, direction);
         player.method_490("Wrench Mode changed : " + getWrenchMode(itemStack).getTranslatedName());
     }
 
-    public static WrenchMode getWrenchMode(ItemStack stack){
+    public WrenchMode getWrenchMode(ItemStack stack){
         return getWrenchModes(stack).get(readMode(stack));
     }
 
-    public static void setWrenchMode(ItemStack stack, int mode){
+    public void setWrenchMode(ItemStack stack, int mode){
         writeMode(stack, mode);
     }
 
@@ -49,7 +49,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
         }
     }
 
-    public static ArrayList<WrenchMode> getWrenchModes(ItemStack itemStack){
+    public ArrayList<WrenchMode> getWrenchModes(ItemStack itemStack){
         return ((WrenchBase)itemStack.getItem()).wrenchModes;
     }
 
@@ -81,12 +81,15 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     }
 
     // NBT
-    public static int readMode(ItemStack itemStack) {
+    public int readMode(ItemStack itemStack) {
         NbtCompound nbt = ((StationItemNbt) itemStack).getStationNbt();
+        if(!nbt.contains("wrench_mode")){
+            writeMode(itemStack, 0);
+        }
         return MathUtil.clamp(nbt.getInt("wrench_mode"), 0, getWrenchModes(itemStack).size()-1);
     }
 
-    public static void writeMode(ItemStack itemStack, int mode) {
+    public void writeMode(ItemStack itemStack, int mode) {
         NbtCompound nbt = ((StationItemNbt) itemStack).getStationNbt();
         nbt.putInt("wrench_mode", mode);
     }
