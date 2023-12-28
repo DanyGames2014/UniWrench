@@ -27,7 +27,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
     // Wrench Modes
     public void cycleWrenchMode(ItemStack itemStack, int direction){
-        setWrenchMode(itemStack, MathUtil.clamp(readMode(itemStack)+direction, 0, wrenchModes.size()-1));
+        setWrenchMode(itemStack, MathUtil.clamp(readMode(itemStack)+direction, 0, ((WrenchBase)itemStack.getItem()).wrenchModes.size()-1));
     }
 
     public void cycleWrenchMode(ItemStack itemStack, int direction, PlayerEntity player){
