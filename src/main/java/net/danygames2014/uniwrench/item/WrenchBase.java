@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
-    protected ArrayList<WrenchMode> wrenchModes;
+    private final ArrayList<WrenchMode> wrenchModes;
 
     public WrenchBase(Identifier identifier) {
         super(identifier);
@@ -26,38 +26,42 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     }
 
     // Wrench Modes
-    public void cycleWrenchMode(ItemStack itemStack, int direction){
-        setWrenchMode(itemStack, MathUtil.clamp(readMode(itemStack)+direction, 0, getWrenchModes(itemStack).size()-1));
+    public void cycleWrenchMode(ItemStack itemStack, int direction) {
+        this.setWrenchMode(itemStack, MathUtil.clamp(this.readMode(itemStack) + direction, 0, this.wrenchModes.size() - 1));
     }
 
-    public void cycleWrenchMode(ItemStack itemStack, int direction, PlayerEntity player){
-        cycleWrenchMode(itemStack, direction);
-        player.method_490("Wrench Mode changed : " + getWrenchMode(itemStack).getTranslatedName());
+    public void cycleWrenchMode(ItemStack itemStack, int direction, PlayerEntity player) {
+        this.cycleWrenchMode(itemStack, direction);
+        player.method_490("Wrench Mode changed : " + this.getWrenchMode(itemStack).getTranslatedName());
     }
 
-    public WrenchMode getWrenchMode(ItemStack stack){
-        return getWrenchModes(stack).get(readMode(stack));
+    public WrenchMode getWrenchMode(ItemStack stack) {
+        return this.wrenchModes.get(this.readMode(stack));
     }
 
-    public void setWrenchMode(ItemStack stack, int mode){
-        writeMode(stack, mode);
+    public void setWrenchMode(ItemStack stack, int mode) {
+        this.writeMode(stack, mode);
     }
 
-    public void addWrenchMode(WrenchMode wrenchMode){
-        if(!wrenchModes.contains(wrenchMode)){
-            wrenchModes.add(wrenchMode);
+    public void addWrenchMode(WrenchMode wrenchMode) {
+        if (wrenchMode == null) {
+            System.out.println("WRENCH MODE IS NULL! The game will now crash because fuck you (:");
         }
-    }
 
-    public ArrayList<WrenchMode> getWrenchModes(ItemStack itemStack){
-        return ((WrenchBase)itemStack.getItem()).wrenchModes;
+        // I know this can be null, and if it is i want it to crash because that means i can cry over race conditions again :)))
+        //noinspection DataFlowIssue
+        System.out.println("Adding Wrench Mode " + wrenchMode.name + " to " + this.getTranslatedName());
+
+        if (!this.wrenchModes.contains(wrenchMode)) {
+            this.wrenchModes.add(wrenchMode);
+        }
     }
 
     // Wrench Actions
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side) {
-        if(world.getBlockState(x,y,z).getBlock() instanceof Wrenchable){
-            ((Wrenchable) world.getBlockState(x,y,z).getBlock()).wrenchRightClick(stack, player, player.method_1373(), world, x, y, z, side, getWrenchMode(stack));
+        if (world.getBlockState(x, y, z).getBlock() instanceof Wrenchable) {
+            ((Wrenchable) world.getBlockState(x, y, z).getBlock()).wrenchRightClick(stack, player, player.method_1373(), world, x, y, z, side, this.getWrenchMode(stack));
             return true;
         }
         return false;
@@ -65,28 +69,32 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
     @Override
     public boolean preMine(ItemStack stack, BlockState blockState, int x, int y, int z, int side, PlayerEntity player) {
-        if(player.world.getBlockState(x,y,z).getBlock() instanceof Wrenchable){
-            ((Wrenchable) player.world.getBlockState(x,y,z).getBlock()).wrenchLeftClick(stack, player, player.method_1373(), player.world, x, y, z, side, getWrenchMode(stack));
+        if (player.world.getBlockState(x, y, z).getBlock() instanceof Wrenchable) {
+            ((Wrenchable) player.world.getBlockState(x, y, z).getBlock()).wrenchLeftClick(stack, player, player.method_1373(), player.world, x, y, z, side, this.getWrenchMode(stack));
         }
         return false;
     }
 
     // Tooltip
-    @Override
     public String[] getTooltip(ItemStack stack, String originalTooltip) {
+        if (this.wrenchModes.get(0) == null) {
+            return new String[]{
+                    "ERROR"
+            };
+        }
         return new String[]{
-          originalTooltip,
-          "Mode : " + getWrenchMode(stack).getTranslatedName()
+                originalTooltip,
+                "Mode : " + this.getWrenchMode(stack).getTranslatedName()
         };
     }
 
     // NBT
     public int readMode(ItemStack itemStack) {
         NbtCompound nbt = ((StationItemNbt) itemStack).getStationNbt();
-        if(!nbt.contains("wrench_mode")){
-            writeMode(itemStack, 0);
+        if (!nbt.contains("wrench_mode")) {
+            this.writeMode(itemStack, 0);
         }
-        return MathUtil.clamp(nbt.getInt("wrench_mode"), 0, getWrenchModes(itemStack).size()-1);
+        return MathUtil.clamp(nbt.getInt("wrench_mode"), 0, this.wrenchModes.size() - 1);
     }
 
     public void writeMode(ItemStack itemStack, int mode) {
