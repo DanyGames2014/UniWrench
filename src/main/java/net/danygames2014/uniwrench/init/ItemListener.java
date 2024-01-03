@@ -19,14 +19,7 @@ public class ItemListener {
 
     @EventListener
     public void registerWrench(ItemRegistryEvent event){
-        WrenchMode.MODE_WRENCH = new WrenchMode(MOD_ID.id("wrench"));
-        WrenchMode.MODE_ROTATE  = new WrenchMode(MOD_ID.id("rotate"));
-
         universalWrench = new UniversalWrench(MOD_ID.id("universal_wrench")).setTranslationKey(MOD_ID,"universal_wrench");
-        ((UniversalWrench)universalWrench).addWrenchMode(WrenchMode.MODE_WRENCH);
-        ((UniversalWrench)universalWrench).addWrenchMode(WrenchMode.MODE_ROTATE);
-
-
         StationAPI.EVENT_BUS.post(new UniversalWrenchModeEvent((UniversalWrench) universalWrench));
     }
 }
