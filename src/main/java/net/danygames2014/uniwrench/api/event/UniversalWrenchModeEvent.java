@@ -8,6 +8,7 @@ import net.modificationstation.stationapi.api.StationAPI;
 /**
  * Use this event to add modes onto the default Universal wrench which can be accessed using event.wrench
  */
+@SuppressWarnings("UnstableApiUsage")
 @EventPhases(StationAPI.INTERNAL_PHASE)
 public class UniversalWrenchModeEvent extends Event {
     public UniversalWrench wrench;

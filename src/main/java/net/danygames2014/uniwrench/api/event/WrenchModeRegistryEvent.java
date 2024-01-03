@@ -7,6 +7,7 @@ import net.modificationstation.stationapi.api.StationAPI;
 /**
  * Use this event to create new Wrench Modes
  */
+@SuppressWarnings("UnstableApiUsage")
 @EventPhases(StationAPI.INTERNAL_PHASE)
 public class WrenchModeRegistryEvent extends Event {
 }
