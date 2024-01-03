@@ -5,14 +5,15 @@ import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.HashMap;
 
+@SuppressWarnings("unused")
 public class WrenchMode {
     public static WrenchMode MODE_WRENCH;
     public static WrenchMode MODE_ROTATE;
     public static final WrenchMode INVALID = new WrenchMode(Identifier.of("invalid_wrench_mode"));
 
     public Identifier identifier;
-    public String name = "";
-    public String translationKey = "";
+    public String name;
+    public String translationKey;
 
     public static HashMap<Identifier,WrenchMode> WRENCH_MODES;
 

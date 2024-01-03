@@ -8,6 +8,7 @@ import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Null;
 import org.apache.logging.log4j.Logger;
 
+@SuppressWarnings("unused")
 public class InitEventListener {
     @Entrypoint.Logger
     public static final Logger logger = Null.get();

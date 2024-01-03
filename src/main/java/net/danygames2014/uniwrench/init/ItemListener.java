@@ -1,6 +1,5 @@
 package net.danygames2014.uniwrench.init;
 
-import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.event.UniversalWrenchModeEvent;
 import net.danygames2014.uniwrench.item.UniversalWrench;
 import net.mine_diver.unsafeevents.listener.EventListener;
@@ -11,6 +10,7 @@ import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
 
+@SuppressWarnings("unused")
 public class ItemListener {
     @Entrypoint.Namespace
     public static final Namespace MOD_ID = Null.get();
