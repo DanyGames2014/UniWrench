@@ -11,7 +11,7 @@ First you need to import the mod into your gradle workspace by adding a dependen
 In build.gradle in dependencies add the following :
 ```
 dependencies {
-  modImplementation("com.github.DanyGames2014:UniversalWrench:${project.uniwrench_version}")
+  modImplementation("com.github.DanyGames2014:UniWrench:${project.uniwrench_version}")
 }
 ```
 
