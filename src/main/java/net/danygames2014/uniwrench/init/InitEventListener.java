@@ -14,7 +14,7 @@ public class InitEventListener {
     public static final Logger logger = Null.get();
 
     @EventListener
-    public void initEventTest(InitEvent event){
+    public void initEventTest(InitEvent event) {
         StationAPI.EVENT_BUS.post(new WrenchModeRegistryEvent());
         logger.info("Posting Wrench Mode Registry Event");
     }

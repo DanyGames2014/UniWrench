@@ -17,7 +17,8 @@ public abstract class PlayerInventoryMixin {
     @Shadow
     public abstract ItemStack getSelectedItem();
 
-    @Shadow public PlayerEntity player;
+    @Shadow
+    public PlayerEntity player;
 
     @Inject(method = "method_692", at = @At("HEAD"), cancellable = true)
     public void wrenchScroll(int scrollDirection, CallbackInfo ci) {

@@ -18,8 +18,8 @@ public class ItemListener {
     public static Item universalWrench;
 
     @EventListener
-    public void registerWrench(ItemRegistryEvent event){
-        universalWrench = new UniversalWrench(MOD_ID.id("universal_wrench")).setTranslationKey(MOD_ID,"universal_wrench");
+    public void registerWrench(ItemRegistryEvent event) {
+        universalWrench = new UniversalWrench(MOD_ID.id("universal_wrench")).setTranslationKey(MOD_ID, "universal_wrench");
         StationAPI.EVENT_BUS.post(new UniversalWrenchModeEvent((UniversalWrench) universalWrench));
     }
 }

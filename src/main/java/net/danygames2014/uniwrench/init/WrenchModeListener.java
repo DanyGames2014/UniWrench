@@ -13,7 +13,7 @@ public class WrenchModeListener {
     public static final Namespace MOD_ID = Null.get();
 
     @EventListener
-    public void registerWrenchModes(WrenchModeRegistryEvent event){
+    public void registerWrenchModes(WrenchModeRegistryEvent event) {
         WrenchMode.MODE_WRENCH = new WrenchMode(MOD_ID.id("wrench"));
         WrenchMode.MODE_ROTATE = new WrenchMode(MOD_ID.id("rotate"));
     }
