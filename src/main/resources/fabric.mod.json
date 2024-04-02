@@ -18,7 +18,7 @@
       "net.danygames2014.uniwrench.init.InitEventListener",
       "net.danygames2014.uniwrench.init.ItemListener",
       "net.danygames2014.uniwrench.init.PacketListener",
-      "net.danygames2014.uniwrench.init.TestListener",
+      "net.danygames2014.uwtest.event.TestListener",
       "net.danygames2014.uniwrench.init.WrenchModeListener"
     ],
     "stationapi:event_bus_client": [

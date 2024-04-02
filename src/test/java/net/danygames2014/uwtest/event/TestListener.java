@@ -1,5 +1,6 @@
-package net.danygames2014.uniwrench.init;
+package net.danygames2014.uwtest.event;
 
+import net.danygames2014.uwtest.block.WrenchableBlock;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;

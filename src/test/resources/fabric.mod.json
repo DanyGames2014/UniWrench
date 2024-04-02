@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "uwtest",
+  "version": "1.0.0",
+
+  "name": "UniWrench Test Mod",
+  "description": "Test Mod for UniWrench",
+  "authors": [
+    "DanyGames2014"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/uwtest/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+      "net.danygames2014.uwtest.event.TestListener"
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}

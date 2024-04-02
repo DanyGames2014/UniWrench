@@ -1,4 +1,4 @@
-package net.danygames2014.uniwrench.init;
+package net.danygames2014.uwtest.block;
 
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
