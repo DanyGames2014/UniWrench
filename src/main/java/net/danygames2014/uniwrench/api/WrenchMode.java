@@ -1,5 +1,6 @@
 package net.danygames2014.uniwrench.api;
 
+import net.danygames2014.uniwrench.UniWrench;
 import net.minecraft.client.resource.language.I18n;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -18,6 +19,8 @@ public class WrenchMode {
     public static HashMap<Identifier,WrenchMode> WRENCH_MODES;
 
     public WrenchMode(Identifier identifier) {
+        UniWrench.logger.info("Creating wrench mode " + identifier);
+
         this.identifier = identifier;
         this.name = identifier.path;
         this.translationKey = "wrenchmode." + identifier.namespace + ":" + name + ".name";

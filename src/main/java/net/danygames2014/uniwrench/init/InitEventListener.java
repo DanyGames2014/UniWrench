@@ -14,7 +14,7 @@ public class InitEventListener {
     @Entrypoint.Logger
     public static final Logger logger = Null.get();
 
-    @EventListener(priority = ListenerPriority.HIGHEST)
+    @EventListener(priority = ListenerPriority.HIGHEST, phase = InitEvent.PRE_INIT_PHASE)
     public void initEventTest(InitEvent event) {
         StationAPI.EVENT_BUS.post(new WrenchModeRegistryEvent());
         logger.info("Posting Wrench Mode Registry Event");

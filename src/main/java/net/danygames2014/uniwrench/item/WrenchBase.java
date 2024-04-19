@@ -1,11 +1,14 @@
 package net.danygames2014.uniwrench.item;
 
+import net.danygames2014.uniwrench.UniWrench;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
 import net.danygames2014.uniwrench.network.WrenchModePacket;
 import net.danygames2014.uniwrench.util.MathUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -18,10 +21,10 @@ import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
-
     @Environment(EnvType.CLIENT)
     public static int updateCounter;
     @Environment(EnvType.CLIENT)
@@ -40,7 +43,11 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
         this.setWrenchMode(itemStack, MathUtil.clamp(this.readMode(itemStack) + direction, 0, this.wrenchModes.size() - 1));
         player.method_490("Wrench Mode changed : " + this.getWrenchMode(itemStack).getTranslatedName());
         if (player.world.isRemote) {
-            PacketHelper.send(new WrenchModePacket(readMode(itemStack)));
+            for (int i = 0; i < player.inventory.main.length; i++) {
+                if(player.inventory.main[i] == itemStack){
+                    PacketHelper.send(new WrenchModePacket(readMode(itemStack), i));
+                }
+            }
         }
     }
 
@@ -59,10 +66,17 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
         // I know this can be null, and if it is i want it to crash because that means i can cry over race conditions again :)))
         //noinspection DataFlowIssue
-        System.out.println("Adding Wrench Mode " + wrenchMode.name + " to " + this.getTranslatedName());
+        UniWrench.logger.info("Adding Wrench Mode " + wrenchMode.name + " to " + this.getTranslatedName());
 
         if (!this.wrenchModes.contains(wrenchMode)) {
             this.wrenchModes.add(wrenchMode);
+        }
+    }
+
+    // Wrench Mode Rendering
+    public void renderTooltip(){
+        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
+            ((Minecraft)FabricLoader.getInstance().getGameInstance()).textRenderer.drawWithShadow("Test", 10,10, Color.white.getRGB());
         }
     }
 
@@ -87,11 +101,12 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     @Environment(EnvType.CLIENT)
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        updateCounter++;
-        if(updateCounter >= updateDelay){
-            updateCounter = 0;
-            if(selected){
-                PacketHelper.send(new WrenchModePacket(-7000));
+        renderTooltip();
+        if(world.isRemote){
+            updateCounter++;
+            if(updateCounter >= updateDelay){
+                updateCounter = 0;
+                PacketHelper.send(new WrenchModePacket(-7000, slot));
             }
         }
     }

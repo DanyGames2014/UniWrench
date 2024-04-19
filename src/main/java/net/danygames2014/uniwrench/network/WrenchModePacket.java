@@ -23,18 +23,21 @@ import java.io.IOException;
 public class WrenchModePacket extends Packet implements IdentifiablePacket {
     private static final Identifier identifier = ItemListener.MOD_ID.id("wrench_mode");
     private int wrenchMode;
+    private int slot;
 
     public WrenchModePacket() {
     }
 
-    public WrenchModePacket(int wrenchMode) {
+    public WrenchModePacket(int wrenchMode, int slot) {
         this.wrenchMode = wrenchMode;
+        this.slot = slot;
     }
 
     @Override
     public void read(DataInputStream stream) {
         try {
             this.wrenchMode = stream.readInt();
+            this.slot = stream.readInt();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -44,6 +47,7 @@ public class WrenchModePacket extends Packet implements IdentifiablePacket {
     public void write(DataOutputStream stream) {
         try {
             stream.writeInt(this.wrenchMode);
+            stream.writeInt(this.slot);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -63,9 +67,10 @@ public class WrenchModePacket extends Packet implements IdentifiablePacket {
     public void handleClient(NetworkHandler networkHandler){
         ClientPlayerAccessor accessor = (ClientPlayerAccessor) networkHandler;
         Minecraft minecraft = accessor.getMinecraft();
-        ItemStack selectedItem = minecraft.player.inventory.getSelectedItem();
-        if (selectedItem.getItem() instanceof WrenchBase wrench) {
-            wrench.setWrenchMode(selectedItem, this.wrenchMode);
+
+        ItemStack stack  = minecraft.player.inventory.main[this.slot];
+        if (stack.getItem() instanceof WrenchBase wrench) {
+            wrench.setWrenchMode(stack, this.wrenchMode);
         }
     }
 
@@ -74,21 +79,21 @@ public class WrenchModePacket extends Packet implements IdentifiablePacket {
         ServerPlayerAccessor accessor = (ServerPlayerAccessor) networkHandler;
         ServerPlayerEntity player = accessor.getServerPlayer();
 
-        ItemStack selectedItem = player.inventory.getSelectedItem();
-        if (selectedItem != null && selectedItem.getItem() instanceof WrenchBase wrench) {
+        ItemStack stack  = player.inventory.main[this.slot];
+        if (stack != null && stack.getItem() instanceof WrenchBase wrench) {
             // Wrench Mode -7000 = Request Update
             if (this.wrenchMode == -7000) {
-                PacketHelper.sendTo(player, new WrenchModePacket(wrench.readMode(selectedItem)));
-                // Anything else = Set Mode on Server Side
+                PacketHelper.sendTo(player, new WrenchModePacket(wrench.readMode(stack),this.slot));
+            // Anything else = Set Mode on Server Side
             } else {
-                wrench.setWrenchMode(selectedItem, this.wrenchMode);
+                wrench.setWrenchMode(stack, this.wrenchMode);
             }
         }
     }
 
     @Override
     public int size() {
-        return 4;
+        return 8;
     }
 
     @Override
