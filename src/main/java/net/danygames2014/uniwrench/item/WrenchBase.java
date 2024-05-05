@@ -3,7 +3,7 @@ package net.danygames2014.uniwrench.item;
 import net.danygames2014.uniwrench.UniWrench;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
-import net.danygames2014.uniwrench.network.WrenchModePacket;
+import net.danygames2014.uniwrench.network.WrenchModeC2SPacket;
 import net.danygames2014.uniwrench.util.MathUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -25,10 +25,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
-    @Environment(EnvType.CLIENT)
-    public static int updateCounter;
-    @Environment(EnvType.CLIENT)
-    public static final int updateDelay = 50;
     private final ArrayList<WrenchMode> wrenchModes;
 
     public WrenchBase(Identifier identifier) {
@@ -45,7 +41,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
         if (player.world.isRemote) {
             for (int i = 0; i < player.inventory.main.length; i++) {
                 if(player.inventory.main[i] == itemStack){
-                    PacketHelper.send(new WrenchModePacket(readMode(itemStack), i));
+                    PacketHelper.send(new WrenchModeC2SPacket(readMode(itemStack), i));
                 }
             }
         }
@@ -102,13 +98,6 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         renderTooltip();
-        if(world.isRemote){
-            updateCounter++;
-            if(updateCounter >= updateDelay){
-                updateCounter = 0;
-                PacketHelper.send(new WrenchModePacket(-7000, slot));
-            }
-        }
     }
 
     // Tooltip

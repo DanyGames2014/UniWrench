@@ -13,22 +13,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
 import net.modificationstation.stationapi.api.network.packet.IdentifiablePacket;
-import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class WrenchModePacket extends Packet implements IdentifiablePacket {
+public class WrenchModeC2SPacket extends Packet implements IdentifiablePacket {
     private static final Identifier identifier = ItemListener.MOD_ID.id("wrench_mode");
     private int wrenchMode;
     private int slot;
 
-    public WrenchModePacket() {
+    public WrenchModeC2SPacket() {
     }
 
-    public WrenchModePacket(int wrenchMode, int slot) {
+    public WrenchModeC2SPacket(int wrenchMode, int slot) {
         this.wrenchMode = wrenchMode;
         this.slot = slot;
     }
@@ -57,21 +56,7 @@ public class WrenchModePacket extends Packet implements IdentifiablePacket {
     public void apply(NetworkHandler networkHandler) {
         System.out.println("Packet Received = Wrench Mode : " + this.wrenchMode);
 
-        switch (FabricLoader.INSTANCE.getEnvironmentType()){
-            case CLIENT -> handleClient(networkHandler);
-            case SERVER -> handleServer(networkHandler);
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    public void handleClient(NetworkHandler networkHandler){
-        ClientPlayerAccessor accessor = (ClientPlayerAccessor) networkHandler;
-        Minecraft minecraft = accessor.getMinecraft();
-
-        ItemStack stack  = minecraft.player.inventory.main[this.slot];
-        if (stack.getItem() instanceof WrenchBase wrench) {
-            wrench.setWrenchMode(stack, this.wrenchMode);
-        }
+        handleServer(networkHandler);
     }
 
     @Environment(EnvType.SERVER)
@@ -81,13 +66,7 @@ public class WrenchModePacket extends Packet implements IdentifiablePacket {
 
         ItemStack stack  = player.inventory.main[this.slot];
         if (stack != null && stack.getItem() instanceof WrenchBase wrench) {
-            // Wrench Mode -7000 = Request Update
-            if (this.wrenchMode == -7000) {
-                PacketHelper.sendTo(player, new WrenchModePacket(wrench.readMode(stack),this.slot));
-            // Anything else = Set Mode on Server Side
-            } else {
-                wrench.setWrenchMode(stack, this.wrenchMode);
-            }
+            wrench.setWrenchMode(stack, this.wrenchMode);
         }
     }
 
@@ -102,6 +81,6 @@ public class WrenchModePacket extends Packet implements IdentifiablePacket {
     }
 
     public static void register() {
-        IdentifiablePacket.register(identifier, true, true, WrenchModePacket::new);
+        IdentifiablePacket.register(identifier, false, true, WrenchModeC2SPacket::new);
     }
 }

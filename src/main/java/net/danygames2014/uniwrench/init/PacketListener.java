@@ -1,6 +1,6 @@
 package net.danygames2014.uniwrench.init;
 
-import net.danygames2014.uniwrench.network.WrenchModePacket;
+import net.danygames2014.uniwrench.network.WrenchModeC2SPacket;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.event.network.packet.PacketRegisterEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -13,7 +13,7 @@ public class PacketListener {
 
     @EventListener
     public void registerPacket(PacketRegisterEvent event) {
-        WrenchModePacket.register();
+        WrenchModeC2SPacket.register();
     }
 
 }
