@@ -82,8 +82,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side) {
         if (world.getBlockState(x, y, z).getBlock() instanceof Wrenchable) {
-            ((Wrenchable) world.getBlockState(x, y, z).getBlock()).wrenchRightClick(stack, player, player.method_1373(), world, x, y, z, side, this.getWrenchMode(stack));
-            return true;
+            return ((Wrenchable) world.getBlockState(x, y, z).getBlock()).wrenchRightClick(stack, player, player.method_1373(), world, x, y, z, side, this.getWrenchMode(stack));
         }
         return false;
     }
