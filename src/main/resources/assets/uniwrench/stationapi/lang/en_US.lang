@@ -1,4 +1,4 @@
-item.universal_wrench.name=Universal Wrench
+item.uniwrench.universal_wrench.name=Universal Wrench
 
-wrenchmode.wrench.name=Wrench
-wrenchmode.rotate.name=Rotate
+wrenchmode.uniwrench.wrench.name=Wrench
+wrenchmode.uniwrench.rotate.name=Rotate
