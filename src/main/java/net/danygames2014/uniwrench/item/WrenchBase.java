@@ -4,6 +4,7 @@ import net.danygames2014.uniwrench.UniWrench;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
 import net.danygames2014.uniwrench.network.WrenchModeC2SPacket;
+import net.danygames2014.uniwrench.util.HotbarTooltipHelper;
 import net.danygames2014.uniwrench.util.MathUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -37,7 +38,8 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     @Environment(EnvType.CLIENT)
     public void cycleWrenchMode(ItemStack itemStack, int direction, PlayerEntity player) {
         this.setWrenchMode(itemStack, MathUtil.clamp(this.readMode(itemStack) + direction, 0, this.wrenchModes.size() - 1));
-        player.method_490("Wrench Mode changed : " + this.getWrenchMode(itemStack).getTranslatedName());
+        //player.method_490("Wrench Mode changed : " + this.getWrenchMode(itemStack).getTranslatedName());
+        HotbarTooltipHelper.setTooltip("Wrench Mode: " + this.getWrenchMode(itemStack).getTranslatedName(), 40);
         if (player.world.isRemote) {
             for (int i = 0; i < player.inventory.main.length; i++) {
                 if(player.inventory.main[i] == itemStack){
@@ -62,7 +64,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
         // I know this can be null, and if it is i want it to crash because that means i can cry over race conditions again :)))
         //noinspection DataFlowIssue
-        UniWrench.logger.info("Adding Wrench Mode " + wrenchMode.name + " to " + this.getTranslatedName());
+        UniWrench.LOGGER.info("Adding Wrench Mode " + wrenchMode.name + " to " + this.getTranslatedName());
 
         if (!this.wrenchModes.contains(wrenchMode)) {
             this.wrenchModes.add(wrenchMode);
@@ -97,7 +99,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     @Environment(EnvType.CLIENT)
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        renderTooltip();
+//        renderTooltip();
     }
 
     // Tooltip

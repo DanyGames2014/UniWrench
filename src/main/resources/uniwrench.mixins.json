@@ -10,6 +10,7 @@
   ],
   "client": [
     "ClientPlayerAccessor",
+    "InGameHudAccessor",
     "PlayerInventoryMixin"
   ],
   "injectors": {
