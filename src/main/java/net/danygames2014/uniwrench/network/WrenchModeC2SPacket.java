@@ -2,12 +2,9 @@ package net.danygames2014.uniwrench.network;
 
 import net.danygames2014.uniwrench.init.ItemListener;
 import net.danygames2014.uniwrench.item.WrenchBase;
-import net.danygames2014.uniwrench.mixin.ClientPlayerAccessor;
 import net.danygames2014.uniwrench.mixin.ServerPlayerAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.loader.FabricLoader;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetworkHandler;
@@ -20,7 +17,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class WrenchModeC2SPacket extends Packet implements IdentifiablePacket {
-    private static final Identifier identifier = ItemListener.MOD_ID.id("wrench_mode");
+    private static final Identifier identifier = ItemListener.NAMESPACE.id("wrench_mode");
     private int wrenchMode;
     private int slot;
 

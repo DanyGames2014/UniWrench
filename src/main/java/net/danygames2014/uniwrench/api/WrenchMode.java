@@ -1,6 +1,7 @@
 package net.danygames2014.uniwrench.api;
 
 import net.danygames2014.uniwrench.UniWrench;
+import net.danygames2014.uniwrench.init.WrenchModeListener;
 import net.minecraft.client.resource.language.I18n;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -10,7 +11,7 @@ import java.util.HashMap;
 public class WrenchMode {
     public static WrenchMode MODE_WRENCH;
     public static WrenchMode MODE_ROTATE;
-    public static final WrenchMode INVALID = new WrenchMode(Identifier.of("invalid_wrench_mode"));
+    public static final WrenchMode INVALID = new WrenchMode(WrenchModeListener.NAMESPACE.id("invalid_wrench_mode"));
 
     public Identifier identifier;
     public String name;
@@ -19,11 +20,11 @@ public class WrenchMode {
     public static HashMap<Identifier,WrenchMode> WRENCH_MODES;
 
     public WrenchMode(Identifier identifier) {
-        UniWrench.logger.info("Creating wrench mode " + identifier);
+        UniWrench.LOGGER.info("Creating wrench mode " + identifier);
 
         this.identifier = identifier;
         this.name = identifier.path;
-        this.translationKey = "wrenchmode." + identifier.namespace + ":" + name + ".name";
+        this.translationKey = "wrenchmode." + identifier.namespace + "." + name + ".name";
 
         if(WRENCH_MODES == null){
             WRENCH_MODES = new HashMap<>();

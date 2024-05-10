@@ -13,13 +13,13 @@ import net.modificationstation.stationapi.api.util.Null;
 @SuppressWarnings("unused")
 public class ItemListener {
     @Entrypoint.Namespace
-    public static final Namespace MOD_ID = Null.get();
+    public static final Namespace NAMESPACE = Null.get();
 
     public static Item universalWrench;
 
     @EventListener
     public void registerWrench(ItemRegistryEvent event) {
-        universalWrench = new UniversalWrench(MOD_ID.id("universal_wrench")).setTranslationKey(MOD_ID, "universal_wrench");
+        universalWrench = new UniversalWrench(NAMESPACE.id("universal_wrench")).setTranslationKey(NAMESPACE, "universal_wrench");
         StationAPI.EVENT_BUS.post(new UniversalWrenchModeEvent((UniversalWrench) universalWrench));
     }
 }

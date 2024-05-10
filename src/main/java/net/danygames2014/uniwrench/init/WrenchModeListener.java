@@ -11,11 +11,11 @@ import net.modificationstation.stationapi.api.util.Null;
 @SuppressWarnings("unused")
 public class WrenchModeListener {
     @Entrypoint.Namespace
-    public static final Namespace MOD_ID = Null.get();
+    public static final Namespace NAMESPACE = Null.get();
 
     @EventListener(priority = ListenerPriority.HIGHEST)
     public void registerWrenchModes(WrenchModeRegistryEvent event) {
-        WrenchMode.MODE_WRENCH = new WrenchMode(MOD_ID.id("wrench"));
-        WrenchMode.MODE_ROTATE = new WrenchMode(MOD_ID.id("rotate"));
+        WrenchMode.MODE_WRENCH = new WrenchMode(NAMESPACE.id("wrench"));
+        WrenchMode.MODE_ROTATE = new WrenchMode(NAMESPACE.id("rotate"));
     }
 }

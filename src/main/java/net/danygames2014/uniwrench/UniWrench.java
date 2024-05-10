@@ -6,5 +6,5 @@ import org.apache.logging.log4j.Logger;
 
 public class UniWrench {
     @Entrypoint.Logger
-    public static final Logger logger = Null.get();
+    public static final Logger LOGGER = Null.get();
 }

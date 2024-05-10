@@ -8,9 +8,6 @@ import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
 
 public class PacketListener {
-    @Entrypoint.Namespace
-    public static final Namespace MOD_ID = Null.get();
-
     @EventListener
     public void registerPacket(PacketRegisterEvent event) {
         WrenchModeC2SPacket.register();
