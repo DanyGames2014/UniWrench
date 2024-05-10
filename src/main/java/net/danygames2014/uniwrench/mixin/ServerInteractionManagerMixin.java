@@ -23,7 +23,7 @@ public class ServerInteractionManagerMixin {
             return;
         }
 
-        if (stack.getItem() instanceof WrenchBase wrench && state.getBlock() instanceof Wrenchable wrenchable) {
+        if (stack.getItem() instanceof WrenchBase wrench) {
             if (!wrench.useOnBlock(stack, player, world, x, y, z, side)) {
                 state.getBlock().onUse(world, x, y, z, player);
             }
