@@ -1,6 +1,5 @@
 package net.danygames2014.uniwrench.mixin;
 
-import net.danygames2014.uniwrench.api.Wrenchable;
 import net.danygames2014.uniwrench.item.WrenchBase;
 import net.minecraft.client.InteractionManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,6 +24,8 @@ public abstract class InteractionManagerMixin {
         if (stack.getItem() instanceof WrenchBase wrench) {
             if (!wrench.useOnBlock(stack, player, world, x, y, z, side)) {
                 state.getBlock().onUse(world, x, y, z, player);
+            } else {
+                cir.setReturnValue(true);
             }
             cir.cancel();
         }
