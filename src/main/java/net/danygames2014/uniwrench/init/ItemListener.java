@@ -1,7 +1,9 @@
 package net.danygames2014.uniwrench.init;
 
+import net.danygames2014.uniwrench.api.WrenchableBlockRegistry;
 import net.danygames2014.uniwrench.api.event.UniversalWrenchModeEvent;
 import net.danygames2014.uniwrench.item.UniversalWrench;
+import net.danygames2014.uniwrench.item.WrenchBase;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.StationAPI;

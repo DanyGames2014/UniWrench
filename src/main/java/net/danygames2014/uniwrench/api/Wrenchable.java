@@ -20,7 +20,7 @@ public interface Wrenchable {
      * @param z z-coordinate of the right-clicked block
      * @param side Side of the block which was right-clicked
      * @param wrenchMode The current wrench mode of the wrench
-     * @return If the action was susccesfull, returning true will cancel the onUse method on the block
+     * @return If the action was susccesfull, returning true will cancel the onUse method on the block aswell as all further actions
      */
     default boolean wrenchRightClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         return false;
@@ -37,7 +37,7 @@ public interface Wrenchable {
      * @param z z-coordinate of the left-clicked block
      * @param side Side of the block which was left-clicked
      * @param wrenchMode The current wrench mode of the wrench
-     * @return If the action was susccesfull
+     * @return If the action was susccesfull, returning true will cancel all further actions
      */
     default boolean wrenchLeftClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         return false;

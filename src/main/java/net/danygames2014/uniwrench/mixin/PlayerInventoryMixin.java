@@ -20,9 +20,9 @@ public abstract class PlayerInventoryMixin {
     @Shadow
     public PlayerEntity player;
 
-    @Inject(method = "method_692", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "scrollInHotbar", at = @At("HEAD"), cancellable = true)
     public void wrenchScroll(int scrollDirection, CallbackInfo ci) {
-        if (this.getSelectedItem() != null && this.getSelectedItem().getItem() instanceof WrenchBase wrench && player.method_1373()) {
+        if (this.getSelectedItem() != null && this.getSelectedItem().getItem() instanceof WrenchBase wrench && player.isSneaking()) {
             wrench.cycleWrenchMode(this.getSelectedItem(), MathUtil.clamp(scrollDirection, -1, 1), this.player);
 
             ci.cancel();

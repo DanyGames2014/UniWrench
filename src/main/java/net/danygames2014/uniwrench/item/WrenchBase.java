@@ -1,16 +1,16 @@
 package net.danygames2014.uniwrench.item;
 
 import net.danygames2014.uniwrench.UniWrench;
+import net.danygames2014.uniwrench.api.WrenchFunction;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
+import net.danygames2014.uniwrench.api.WrenchableBlockRegistry;
 import net.danygames2014.uniwrench.network.WrenchModeC2SPacket;
 import net.danygames2014.uniwrench.util.HotbarTooltipHelper;
 import net.danygames2014.uniwrench.util.MathUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -22,7 +22,6 @@ import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
@@ -59,42 +58,75 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
     public void addWrenchMode(WrenchMode wrenchMode) {
         if (wrenchMode == null) {
-            System.out.println("WRENCH MODE IS NULL! The game will now crash because fuck you (:");
+            UniWrench.LOGGER.fatal("WRENCH MODE IS NULL! The game will now crash because fuck you (:");
         }
 
         // I know this can be null, and if it is i want it to crash because that means i can cry over race conditions again :)))
         //noinspection DataFlowIssue
-        UniWrench.LOGGER.info("Adding Wrench Mode " + wrenchMode.name + " to " + this.getTranslatedName());
+        UniWrench.LOGGER.info("Adding Wrench Mode {} to {}", wrenchMode.name, this.getTranslatedName());
 
         if (!this.wrenchModes.contains(wrenchMode)) {
             this.wrenchModes.add(wrenchMode);
         }
     }
 
-    // Wrench Mode Rendering
-    public void renderTooltip() {
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            ((Minecraft) FabricLoader.getInstance().getGameInstance()).textRenderer.drawWithShadow("Test", 10, 10, Color.white.getRGB());
-        }
-    }
-
     // Wrench Actions
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side) {
-        if (world.getBlockState(x, y, z).getBlock() instanceof Wrenchable) {
-            return ((Wrenchable) world.getBlockState(x, y, z).getBlock()).wrenchRightClick(stack, player, player.method_1373(), world, x, y, z, side, this.getWrenchMode(stack));
-        } else {
-            return wrenchRightClick(stack, player, player.method_1373(), world, x, y, z, side, this.getWrenchMode(stack));
+        Block block = world.getBlockState(x, y, z).getBlock();
+        
+        // First see if the block has the Wrenchable interface
+        if (block instanceof Wrenchable wrenchable) {
+            // If its Wrenchable, try to wrench it
+            boolean wrenched = wrenchable.wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, this.getWrenchMode(stack));
+            
+            // If this returns true, ignore all further actions, if not, continue
+            if (wrenched) {
+                return true;
+            }
+        
+        // Check if any Right Click actions exist for this block
+        } else if (WrenchableBlockRegistry.doRightClickActionsExist(block)) {
+            // If they exist, loop thru them
+            for (WrenchFunction action : WrenchableBlockRegistry.getRightClickActions(block)) {
+                // If any of them returns true, ignore all futher actions
+                if (action.apply(stack, player, player.isSneaking(), world, x, y, z, side, this.getWrenchMode(stack))) {
+                    return true;
+                }
+            }
         }
+        
+        // If no actions existed, or they all returned false, trigger the wrench action
+        return wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, this.getWrenchMode(stack));
     }
 
     @Override
-    public boolean preMine(ItemStack stack, BlockState blockState, int x, int y, int z, int side, PlayerEntity player) {
-        if (player.world.getBlockState(x, y, z).getBlock() instanceof Wrenchable) {
-            return ((Wrenchable) player.world.getBlockState(x, y, z).getBlock()).wrenchLeftClick(stack, player, player.method_1373(), player.world, x, y, z, side, this.getWrenchMode(stack));
-        } else {
-            return !wrenchLeftClick(stack, player, player.method_1373(), player.world, x, y, z, side, this.getWrenchMode(stack));
+    public boolean preMine(ItemStack stack, BlockState state, int x, int y, int z, int side, PlayerEntity player) {
+        Block block = state.getBlock();
+
+        // First see if the block has the Wrenchable interface
+        if (block instanceof Wrenchable wrenchable) {
+            // If its Wrenchable, try to wrench it
+            boolean wrenched = wrenchable.wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, this.getWrenchMode(stack));
+
+            // If this returns true, ignore all further actions, if not, continue
+            if (wrenched) {
+                return false;
+            }
+
+        // Check if any Left Click actions exist for this block
+        } else if (WrenchableBlockRegistry.doRightClickActionsExist(state.getBlock())) {
+            // If they exist, loop thru them
+            for (WrenchFunction action : WrenchableBlockRegistry.getLeftClickActions(block)) {
+                // If any of them returns true, ignore all futher actions
+                if (action.apply(stack, player, player.isSneaking(), player.world, x, y, z, side, this.getWrenchMode(stack))) {
+                    return false;
+                }
+            }
+            
         }
+        
+        return !wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, this.getWrenchMode(stack));
     }
 
     // API Methods
@@ -104,12 +136,6 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
     public boolean wrenchLeftClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         return false;
-    }
-
-    @Environment(EnvType.CLIENT)
-    @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-//        renderTooltip();
     }
 
     // Tooltip

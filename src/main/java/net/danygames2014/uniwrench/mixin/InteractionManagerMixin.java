@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(InteractionManager.class)
 public abstract class InteractionManagerMixin {
-    @Inject(method = "method_1713", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "interactBlock", at = @At(value = "HEAD"), cancellable = true)
     public void flipActions(PlayerEntity player, World world, ItemStack stack, int x, int y, int z, int side, CallbackInfoReturnable<Boolean> cir) {
         BlockState state = world.getBlockState(x, y, z);
 

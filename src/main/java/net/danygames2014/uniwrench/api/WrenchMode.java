@@ -20,7 +20,7 @@ public class WrenchMode {
     public static HashMap<Identifier,WrenchMode> WRENCH_MODES;
 
     public WrenchMode(Identifier identifier) {
-        UniWrench.LOGGER.info("Creating wrench mode " + identifier);
+        UniWrench.LOGGER.info("Creating wrench mode {}", identifier);
 
         this.identifier = identifier;
         this.name = identifier.path;

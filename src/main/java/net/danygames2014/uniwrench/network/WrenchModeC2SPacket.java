@@ -1,5 +1,6 @@
 package net.danygames2014.uniwrench.network;
 
+import net.danygames2014.uniwrench.UniWrench;
 import net.danygames2014.uniwrench.init.ItemListener;
 import net.danygames2014.uniwrench.item.WrenchBase;
 import net.danygames2014.uniwrench.mixin.ServerPlayerAccessor;
@@ -51,17 +52,17 @@ public class WrenchModeC2SPacket extends Packet implements IdentifiablePacket {
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        System.out.println("Packet Received = Wrench Mode : " + this.wrenchMode);
+        UniWrench.LOGGER.debug("Wrench Mode Packet Received with mode {} ", this.wrenchMode);
 
         handleServer(networkHandler);
     }
 
     @Environment(EnvType.SERVER)
-    public void handleServer(NetworkHandler networkHandler){
+    public void handleServer(NetworkHandler networkHandler) {
         ServerPlayerAccessor accessor = (ServerPlayerAccessor) networkHandler;
         ServerPlayerEntity player = accessor.getServerPlayer();
 
-        ItemStack stack  = player.inventory.main[this.slot];
+        ItemStack stack = player.inventory.main[this.slot];
         if (stack != null && stack.getItem() instanceof WrenchBase wrench) {
             wrench.setWrenchMode(stack, this.wrenchMode);
         }
