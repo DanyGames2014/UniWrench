@@ -1,7 +1,7 @@
 package net.danygames2014.uwtest.event;
 
 import net.danygames2014.uniwrench.api.WrenchMode;
-import net.danygames2014.uniwrench.api.WrenchableBlockRegistry;
+import net.danygames2014.uniwrench.api.event.UniversalWrenchModeEvent;
 import net.danygames2014.uniwrench.api.event.WrenchModeRegistryEvent;
 import net.danygames2014.uniwrench.api.event.WrenchableBlockRegisterEvent;
 import net.danygames2014.uwtest.block.CheeseBlock;
@@ -60,5 +60,10 @@ public class TestListener {
     public void wrenchableBlock(WrenchableBlockRegisterEvent event){
         event.registerLeftClickAction(softDependentBlock, ((SoftDependentBlock)softDependentBlock)::wrenchLeftClick);
         event.registerRightClickAction(softDependentBlock, ((SoftDependentBlock)softDependentBlock)::wrenchRightClick);
+    }
+    
+    @EventListener
+    public void addWrenchModes(UniversalWrenchModeEvent event){
+        event.addWrenchMode(testMode1);
     }
 }

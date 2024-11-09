@@ -1,5 +1,6 @@
 package net.danygames2014.uniwrench.api.event;
 
+import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.item.UniversalWrench;
 import net.mine_diver.unsafeevents.Event;
 import net.mine_diver.unsafeevents.event.EventPhases;
@@ -15,5 +16,9 @@ public class UniversalWrenchModeEvent extends Event {
 
     public UniversalWrenchModeEvent(UniversalWrench wrench) {
         this.wrench = wrench;
+    }
+    
+    public void addWrenchMode(WrenchMode mode){
+        this.wrench.addWrenchMode(mode);
     }
 }
