@@ -15,14 +15,16 @@ public class WrenchableBlock extends TemplateBlock implements Wrenchable {
     }
 
     @Override
-    public void wrenchLeftClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
+    public boolean wrenchLeftClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         System.out.println("Wrench Left Click | isRemote : " + world.isRemote + " | WrenchMode : " + wrenchMode.identifier);
         player.method_490("Wrench Left Click | isRemote : " + world.isRemote + " | WrenchMode : " + wrenchMode.identifier);
+        return true;
     }
 
     @Override
-    public void wrenchRightClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
+    public boolean wrenchRightClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         System.out.println("Wrench Right Click | isRemote : " + world.isRemote + " | WrenchMode : " + wrenchMode.identifier);
         player.method_490("Wrench Right Click | isRemote : " + world.isRemote + " | WrenchMode : " + wrenchMode.identifier);
+        return true;
     }
 }

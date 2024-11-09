@@ -42,7 +42,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
         HotbarTooltipHelper.setTooltip("Wrench Mode: " + this.getWrenchMode(itemStack).getTranslatedName(), 40);
         if (player.world.isRemote) {
             for (int i = 0; i < player.inventory.main.length; i++) {
-                if(player.inventory.main[i] == itemStack){
+                if (player.inventory.main[i] == itemStack) {
                     PacketHelper.send(new WrenchModeC2SPacket(readMode(itemStack), i));
                 }
             }
@@ -72,9 +72,9 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     }
 
     // Wrench Mode Rendering
-    public void renderTooltip(){
-        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
-            ((Minecraft)FabricLoader.getInstance().getGameInstance()).textRenderer.drawWithShadow("Test", 10,10, Color.white.getRGB());
+    public void renderTooltip() {
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            ((Minecraft) FabricLoader.getInstance().getGameInstance()).textRenderer.drawWithShadow("Test", 10, 10, Color.white.getRGB());
         }
     }
 
@@ -82,17 +82,27 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side) {
         if (world.getBlockState(x, y, z).getBlock() instanceof Wrenchable) {
-            ((Wrenchable) world.getBlockState(x, y, z).getBlock()).wrenchRightClick(stack, player, player.method_1373(), world, x, y, z, side, this.getWrenchMode(stack));
-            return true;
+            return ((Wrenchable) world.getBlockState(x, y, z).getBlock()).wrenchRightClick(stack, player, player.method_1373(), world, x, y, z, side, this.getWrenchMode(stack));
+        } else {
+            return wrenchRightClick(stack, player, player.method_1373(), world, x, y, z, side, this.getWrenchMode(stack));
         }
-        return false;
     }
 
     @Override
     public boolean preMine(ItemStack stack, BlockState blockState, int x, int y, int z, int side, PlayerEntity player) {
         if (player.world.getBlockState(x, y, z).getBlock() instanceof Wrenchable) {
-            ((Wrenchable) player.world.getBlockState(x, y, z).getBlock()).wrenchLeftClick(stack, player, player.method_1373(), player.world, x, y, z, side, this.getWrenchMode(stack));
+            return ((Wrenchable) player.world.getBlockState(x, y, z).getBlock()).wrenchLeftClick(stack, player, player.method_1373(), player.world, x, y, z, side, this.getWrenchMode(stack));
+        } else {
+            return !wrenchLeftClick(stack, player, player.method_1373(), player.world, x, y, z, side, this.getWrenchMode(stack));
         }
+    }
+
+    // API Methods
+    public boolean wrenchRightClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
+        return false;
+    }
+
+    public boolean wrenchLeftClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         return false;
     }
 

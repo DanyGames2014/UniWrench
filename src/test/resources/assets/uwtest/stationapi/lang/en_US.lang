@@ -1,0 +1,10 @@
+item.uwtest.test_wrench.name=Universal Wrench
+
+tile.uwtest.wrenchable_block.name=Wrenchable Block
+tile.uwtest.cheese_block.name=Cheese Block
+
+wrenchmode.uwtest.test_mode_1.name=Test Mode 1
+wrenchmode.uwtest.test_mode_2.name=Test Mode 2
+wrenchmode.uwtest.test_mode_3.name=Test Mode 3
+wrenchmode.uwtest.test_mode_4.name=Test Mode 4
+wrenchmode.uwtest.test_mode_5.name=Test Mode 5

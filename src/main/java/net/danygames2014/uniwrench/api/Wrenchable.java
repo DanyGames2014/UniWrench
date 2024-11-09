@@ -9,9 +9,37 @@ import net.minecraft.world.World;
  */
 @SuppressWarnings("unused")
 public interface Wrenchable {
-    default void wrenchRightClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
+    /**
+     * This method will be fired when the block is right-clicked with a wrench
+     * @param stack ItemStack of the wrench
+     * @param player Player which right-clicked the block
+     * @param isSneaking If the player is sneaking
+     * @param world The world in which this happened
+     * @param x x-coordinate of the right-clicked block
+     * @param y y-coordinate of the right-clicked block
+     * @param z z-coordinate of the right-clicked block
+     * @param side Side of the block which was right-clicked
+     * @param wrenchMode The current wrench mode of the wrench
+     * @return If the action was susccesfull, returning true will cancel the onUse method on the block
+     */
+    default boolean wrenchRightClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
+        return false;
     }
 
-    default void wrenchLeftClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
+    /**
+     * This method will be fired when the block is left-clicked with a wrench
+     * @param stack ItemStack of the wrench
+     * @param player Player which left-clicked the block
+     * @param isSneaking If the player is sneaking
+     * @param world The world in which this happened
+     * @param x x-coordinate of the left-clicked block
+     * @param y y-coordinate of the left-clicked block
+     * @param z z-coordinate of the left-clicked block
+     * @param side Side of the block which was left-clicked
+     * @param wrenchMode The current wrench mode of the wrench
+     * @return If the action was susccesfull
+     */
+    default boolean wrenchLeftClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
+        return false;
     }
 }
