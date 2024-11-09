@@ -2,11 +2,11 @@ package net.danygames2014.uniwrench.compat;
 
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.PistonBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+@SuppressWarnings("unused")
 public class VanillaCompat {
     public static boolean rotateStairs(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         if (wrenchMode == WrenchMode.MODE_ROTATE && world.getBlockState(x, y, z).getBlock() instanceof StairsBlock) {
