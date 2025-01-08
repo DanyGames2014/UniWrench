@@ -11,7 +11,7 @@ import net.modificationstation.stationapi.api.util.Null;
 @SuppressWarnings("unused")
 public class WrenchModeListener {
     @Entrypoint.Namespace
-    public static final Namespace NAMESPACE = Null.get();
+    public static Namespace NAMESPACE;
 
     @EventListener(priority = ListenerPriority.HIGHEST)
     public void registerWrenchModes(WrenchModeRegistryEvent event) {

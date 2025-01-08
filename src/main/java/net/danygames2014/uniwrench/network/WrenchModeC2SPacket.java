@@ -10,15 +10,19 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
-import net.modificationstation.stationapi.api.network.packet.IdentifiablePacket;
+import net.modificationstation.stationapi.api.network.packet.ManagedPacket;
+import net.modificationstation.stationapi.api.network.packet.PacketType;
 import net.modificationstation.stationapi.api.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class WrenchModeC2SPacket extends Packet implements IdentifiablePacket {
+public class WrenchModeC2SPacket extends Packet implements ManagedPacket<WrenchModeC2SPacket> {
     private static final Identifier identifier = ItemListener.NAMESPACE.id("wrench_mode");
+    public static PacketType<WrenchModeC2SPacket> TYPE = PacketType.<WrenchModeC2SPacket>builder(false, true, WrenchModeC2SPacket::new).build();
+    
     private int wrenchMode;
     private int slot;
 
@@ -74,11 +78,7 @@ public class WrenchModeC2SPacket extends Packet implements IdentifiablePacket {
     }
 
     @Override
-    public Identifier getId() {
-        return identifier;
-    }
-
-    public static void register() {
-        IdentifiablePacket.register(identifier, false, true, WrenchModeC2SPacket::new);
+    public @NotNull PacketType<WrenchModeC2SPacket> getType() {
+        return TYPE;
     }
 }
