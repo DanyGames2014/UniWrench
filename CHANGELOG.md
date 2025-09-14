@@ -1,1 +1,1 @@
-* Fix a crash in recipe viewers
+* Fix a crash when there are no wrench modes but wrench mode 0 gets queried
