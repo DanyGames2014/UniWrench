@@ -140,7 +140,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
     // Tooltip
     public String[] getTooltip(ItemStack stack, String originalTooltip) {
-        if (this.wrenchModes == null || this.wrenchModes.get(0) == null) {
+        if (this.wrenchModes == null || this.wrenchModes.size() == 0) {
             return new String[]{
                     originalTooltip
             };
