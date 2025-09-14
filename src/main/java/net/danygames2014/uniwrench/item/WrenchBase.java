@@ -74,18 +74,18 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side) {
         Block block = world.getBlockState(x, y, z).getBlock();
-        
+
         // First see if the block has the Wrenchable interface
         if (block instanceof Wrenchable wrenchable) {
             // If its Wrenchable, try to wrench it
             boolean wrenched = wrenchable.wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, this.getWrenchMode(stack));
-            
+
             // If this returns true, ignore all further actions, if not, continue
             if (wrenched) {
                 return true;
             }
-        
-        // Check if any Right Click actions exist for this block
+
+            // Check if any Right Click actions exist for this block
         } else if (WrenchableBlockRegistry.doRightClickActionsExist(block)) {
             // If they exist, loop thru them
             for (WrenchFunction action : WrenchableBlockRegistry.getRightClickActions(block)) {
@@ -95,7 +95,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
                 }
             }
         }
-        
+
         // If no actions existed, or they all returned false, trigger the wrench action
         return wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, this.getWrenchMode(stack));
     }
@@ -114,7 +114,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
                 return false;
             }
 
-        // Check if any Left Click actions exist for this block
+            // Check if any Left Click actions exist for this block
         } else if (WrenchableBlockRegistry.doRightClickActionsExist(state.getBlock())) {
             // If they exist, loop thru them
             for (WrenchFunction action : WrenchableBlockRegistry.getLeftClickActions(block)) {
@@ -123,9 +123,9 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
                     return false;
                 }
             }
-            
+
         }
-        
+
         return !wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, this.getWrenchMode(stack));
     }
 
@@ -140,9 +140,9 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
     // Tooltip
     public String[] getTooltip(ItemStack stack, String originalTooltip) {
-        if (this.wrenchModes.get(0) == null) {
+        if (this.wrenchModes == null || this.wrenchModes.get(0) == null) {
             return new String[]{
-                    "ERROR"
+                    originalTooltip
             };
         }
         return new String[]{
