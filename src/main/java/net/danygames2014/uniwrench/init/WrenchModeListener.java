@@ -17,5 +17,6 @@ public class WrenchModeListener {
     public void registerWrenchModes(WrenchModeRegistryEvent event) {
         WrenchMode.MODE_WRENCH = new WrenchMode(NAMESPACE.id("wrench"));
         WrenchMode.MODE_ROTATE = new WrenchMode(NAMESPACE.id("rotate"));
+        WrenchMode.MODE_DEBUG = new WrenchMode(NAMESPACE.id("debug"));
     }
 }
