@@ -20,7 +20,7 @@ import net.modificationstation.stationapi.api.util.Null;
 
 public class TestListener {
     @Entrypoint.Namespace
-    public static final Namespace NAMESPACE = Null.get();
+    public static Namespace NAMESPACE;
 
     public static Block wrenchableBlock;
     public static Block cheeseBlock;
