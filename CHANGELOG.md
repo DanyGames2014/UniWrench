@@ -1,1 +1,3 @@
-* Fix a crash when there are no wrench modes but wrench mode 0 gets queried
+* Add the ability for wrenche modes to also define actions
+* Add a default debug wrench mode
+* Add a crafting recipe for the wrench
