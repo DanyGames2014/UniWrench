@@ -36,6 +36,10 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     // Wrench Modes
     @Environment(EnvType.CLIENT)
     public void cycleWrenchMode(ItemStack itemStack, int direction, PlayerEntity player) {
+        if (this.wrenchModes == null || this.wrenchModes.isEmpty()) {
+            return;
+        }
+
         this.setWrenchMode(itemStack, MathUtil.clamp(this.readMode(itemStack) + direction, 0, this.wrenchModes.size() - 1));
         //player.method_490("Wrench Mode changed : " + this.getWrenchMode(itemStack).getTranslatedName());
         HotbarTooltipHelper.setTooltip("Wrench Mode: " + this.getWrenchMode(itemStack).getTranslatedName(), 40);
@@ -74,11 +78,12 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side) {
         Block block = world.getBlockState(x, y, z).getBlock();
+        WrenchMode wrenchMode = this.getWrenchMode(stack);
 
         // First see if the block has the Wrenchable interface
         if (block instanceof Wrenchable wrenchable) {
             // If its Wrenchable, try to wrench it
-            boolean wrenched = wrenchable.wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, this.getWrenchMode(stack));
+            boolean wrenched = wrenchable.wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, wrenchMode);
 
             // If this returns true, ignore all further actions, if not, continue
             if (wrenched) {
@@ -90,24 +95,30 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
             // If they exist, loop thru them
             for (WrenchFunction action : WrenchableBlockRegistry.getRightClickActions(block)) {
                 // If any of them returns true, ignore all futher actions
-                if (action.apply(stack, player, player.isSneaking(), world, x, y, z, side, this.getWrenchMode(stack))) {
+                if (action.apply(stack, player, player.isSneaking(), world, x, y, z, side, wrenchMode)) {
                     return true;
                 }
             }
         }
 
         // If no actions existed, or they all returned false, trigger the wrench action
-        return wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, this.getWrenchMode(stack));
+        if (wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, wrenchMode)) {
+            return true;
+        }
+
+        // If no previus actions returned true, try the wrench mode action
+        return wrenchMode.wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, wrenchMode);
     }
 
     @Override
     public boolean preMine(ItemStack stack, BlockState state, int x, int y, int z, int side, PlayerEntity player) {
         Block block = state.getBlock();
+        WrenchMode wrenchMode = this.getWrenchMode(stack);
 
         // First see if the block has the Wrenchable interface
         if (block instanceof Wrenchable wrenchable) {
             // If its Wrenchable, try to wrench it
-            boolean wrenched = wrenchable.wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, this.getWrenchMode(stack));
+            boolean wrenched = wrenchable.wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, wrenchMode);
 
             // If this returns true, ignore all further actions, if not, continue
             if (wrenched) {
@@ -119,28 +130,60 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
             // If they exist, loop thru them
             for (WrenchFunction action : WrenchableBlockRegistry.getLeftClickActions(block)) {
                 // If any of them returns true, ignore all futher actions
-                if (action.apply(stack, player, player.isSneaking(), player.world, x, y, z, side, this.getWrenchMode(stack))) {
+                if (action.apply(stack, player, player.isSneaking(), player.world, x, y, z, side, wrenchMode)) {
                     return false;
                 }
             }
 
         }
 
-        return !wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, this.getWrenchMode(stack));
+        // If no actions existed, or they all returned false, trigger the wrench action
+        if (wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, wrenchMode)) {
+            return false;
+        }
+
+        // If no previus actions returned true, try the wrench mode action
+        return !wrenchMode.wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, wrenchMode);
     }
 
     // API Methods
+    /**
+     * This method will be fired when the block is right-clicked with a wrench
+     * @param stack ItemStack of the wrench
+     * @param player Player which right-clicked the block
+     * @param isSneaking If the player is sneaking
+     * @param world The world in which this happened
+     * @param x x-coordinate of the right-clicked block
+     * @param y y-coordinate of the right-clicked block
+     * @param z z-coordinate of the right-clicked block
+     * @param side Side of the block which was right-clicked
+     * @param wrenchMode The current wrench mode of the wrench
+     * @return If the action was susccesfull, returning true will cancel the onUse method on the block aswell as all further actions
+     */
     public boolean wrenchRightClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         return false;
     }
 
+    /**
+     * This method will be fired when the block is left-clicked with a wrench
+     * @param stack ItemStack of the wrench
+     * @param player Player which left-clicked the block
+     * @param isSneaking If the player is sneaking
+     * @param world The world in which this happened
+     * @param x x-coordinate of the left-clicked block
+     * @param y y-coordinate of the left-clicked block
+     * @param z z-coordinate of the left-clicked block
+     * @param side Side of the block which was left-clicked
+     * @param wrenchMode The current wrench mode of the wrench
+     * @return If the action was susccesfull, returning true will cancel all further actions
+     */
     public boolean wrenchLeftClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         return false;
     }
 
     // Tooltip
     public String[] getTooltip(ItemStack stack, String originalTooltip) {
-        if (this.wrenchModes == null || this.wrenchModes.size() == 0) {
+        if (this.wrenchModes == null || this.wrenchModes.isEmpty()) {
             return new String[]{
                     originalTooltip
             };

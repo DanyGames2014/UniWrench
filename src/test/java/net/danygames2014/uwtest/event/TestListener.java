@@ -8,6 +8,7 @@ import net.danygames2014.uwtest.block.CheeseBlock;
 import net.danygames2014.uwtest.block.SoftDependentBlock;
 import net.danygames2014.uwtest.block.WrenchableBlock;
 import net.danygames2014.uwtest.item.TestWrench;
+import net.danygames2014.uwtest.item.TestWrenchMode;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -49,7 +50,7 @@ public class TestListener {
 
     @EventListener
     public void registerWrenchModes(WrenchModeRegistryEvent event){
-        testMode1 = new WrenchMode(NAMESPACE.id("test_mode_1"));
+        testMode1 = new TestWrenchMode(NAMESPACE.id("test_mode_1"));
         testMode2 = new WrenchMode(NAMESPACE.id("test_mode_2"));
         testMode3 = new WrenchMode(NAMESPACE.id("test_mode_3"));
         testMode4 = new WrenchMode(NAMESPACE.id("test_mode_4"));
