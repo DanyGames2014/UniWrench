@@ -167,7 +167,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
         }
 
         // If no previus actions returned true, try the wrench mode action
-        if(!wrenchMode.wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, wrenchMode)) {
+        if(wrenchMode.wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, wrenchMode)) {
             setDelay(stack, usageDelay);
             return false;
         }
