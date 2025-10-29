@@ -1,2 +1,1 @@
-* Add usage delays to wrenches
-* Improve error logging
+* Fix wrench left click not resetting delays
