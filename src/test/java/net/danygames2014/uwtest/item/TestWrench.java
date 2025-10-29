@@ -18,6 +18,7 @@ public class TestWrench extends WrenchBase {
         this.addWrenchMode(TestListener.testMode3);
         this.addWrenchMode(TestListener.testMode4);
         this.addWrenchMode(TestListener.testMode5);
+        this.usageDelay = 10;
     }
 
     @Override

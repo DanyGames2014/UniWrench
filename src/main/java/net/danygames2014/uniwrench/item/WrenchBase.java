@@ -11,6 +11,7 @@ import net.danygames2014.uniwrench.util.MathUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -26,11 +27,13 @@ import java.util.ArrayList;
 
 public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     private final ArrayList<WrenchMode> wrenchModes;
+    protected int usageDelay;
 
     public WrenchBase(Identifier identifier) {
         super(identifier);
         this.setMaxCount(1);
-        wrenchModes = new ArrayList<>();
+        this.wrenchModes = new ArrayList<>();
+        this.usageDelay = 0;
     }
 
     // Wrench Modes
@@ -77,6 +80,10 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     // Wrench Actions
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side) {
+        if (getDelay(stack) > 0) {
+            return false;
+        }
+        
         Block block = world.getBlockState(x, y, z).getBlock();
         WrenchMode wrenchMode = this.getWrenchMode(stack);
 
@@ -87,6 +94,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
             // If this returns true, ignore all further actions, if not, continue
             if (wrenched) {
+                setDelay(stack, usageDelay);
                 return true;
             }
 
@@ -96,6 +104,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
             for (WrenchFunction action : WrenchableBlockRegistry.getRightClickActions(block)) {
                 // If any of them returns true, ignore all futher actions
                 if (action.apply(stack, player, player.isSneaking(), world, x, y, z, side, wrenchMode)) {
+                    setDelay(stack, usageDelay);
                     return true;
                 }
             }
@@ -103,15 +112,25 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
         // If no actions existed, or they all returned false, trigger the wrench action
         if (wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, wrenchMode)) {
+            setDelay(stack, usageDelay);
             return true;
         }
 
         // If no previus actions returned true, try the wrench mode action
-        return wrenchMode.wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, wrenchMode);
+        if (wrenchMode.wrenchRightClick(stack, player, player.isSneaking(), world, x, y, z, side, wrenchMode)) {
+            setDelay(stack, usageDelay);
+            return true;
+        }
+        
+        return false;
     }
 
     @Override
     public boolean preMine(ItemStack stack, BlockState state, int x, int y, int z, int side, PlayerEntity player) {
+        if (getDelay(stack) > 0) {
+            return false;
+        }
+        
         Block block = state.getBlock();
         WrenchMode wrenchMode = this.getWrenchMode(stack);
 
@@ -122,6 +141,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
             // If this returns true, ignore all further actions, if not, continue
             if (wrenched) {
+                setDelay(stack, usageDelay);
                 return false;
             }
 
@@ -131,6 +151,7 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
             for (WrenchFunction action : WrenchableBlockRegistry.getLeftClickActions(block)) {
                 // If any of them returns true, ignore all futher actions
                 if (action.apply(stack, player, player.isSneaking(), player.world, x, y, z, side, wrenchMode)) {
+                    setDelay(stack, usageDelay);
                     return false;
                 }
             }
@@ -139,11 +160,17 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
         // If no actions existed, or they all returned false, trigger the wrench action
         if (wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, wrenchMode)) {
+            setDelay(stack, usageDelay);
             return false;
         }
 
         // If no previus actions returned true, try the wrench mode action
-        return !wrenchMode.wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, wrenchMode);
+        if(!wrenchMode.wrenchLeftClick(stack, player, player.isSneaking(), player.world, x, y, z, side, wrenchMode)) {
+            setDelay(stack, usageDelay);
+            return false;
+        }
+        
+        return true;
     }
 
     // API Methods
@@ -206,5 +233,29 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     public void writeMode(ItemStack itemStack, int mode) {
         NbtCompound nbt = ((StationItemNbt) itemStack).getStationNbt();
         nbt.putInt("wrench_mode", MathUtil.clamp(mode, 0, this.wrenchModes.size() - 1));
+    }
+
+    // Usage Delay
+    public WrenchBase setUsageDelay(int usageDelay) {
+        this.usageDelay = usageDelay;
+        return this;
+    }
+    
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, world, entity, slot, selected);
+        
+        int delay = getDelay(stack); 
+        if (delay > 0) {
+            setDelay(stack, delay - 1);
+        }
+    }
+
+    public int getDelay(ItemStack itemStack) {
+        return itemStack.getStationNbt().getInt("delay");
+    }
+
+    public void setDelay(ItemStack itemStack, int delay) {
+        itemStack.getStationNbt().putInt("delay", delay);
     }
 }
