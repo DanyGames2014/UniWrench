@@ -65,16 +65,18 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
     public void addWrenchMode(WrenchMode wrenchMode) {
         if (wrenchMode == null) {
-            UniWrench.LOGGER.fatal("WRENCH MODE IS NULL! The game will now crash because fuck you (:");
+            UniWrench.LOGGER.error("Tried to add a null wrench mode to wrench {}", this.toString());
+            return;
         }
 
-        // I know this can be null, and if it is i want it to crash because that means i can cry over race conditions again :)))
-        //noinspection DataFlowIssue
-        UniWrench.LOGGER.info("Adding Wrench Mode {} to {}", wrenchMode.name, this.getTranslatedName());
+        UniWrench.LOGGER.info("Adding Wrench Mode {} to {}", wrenchMode.name, this.toString());
 
-        if (!this.wrenchModes.contains(wrenchMode)) {
-            this.wrenchModes.add(wrenchMode);
+        if (this.wrenchModes.contains(wrenchMode)) {
+            UniWrench.LOGGER.error("Tried to add a duplicate Wrench mode {}", wrenchMode.name);
+            return;
         }
+        
+        this.wrenchModes.add(wrenchMode);
     }
 
     // Wrench Actions
