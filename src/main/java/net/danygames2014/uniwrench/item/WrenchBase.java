@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     private final ArrayList<WrenchMode> wrenchModes;
-    protected int usageDelay;
+    public int usageDelay;
 
     public WrenchBase(Identifier identifier) {
         super(identifier);

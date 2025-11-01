@@ -6,13 +6,14 @@
   "mixins": [
   ],
   "server": [
-    "ServerPlayerAccessor",
-    "ServerInteractionManagerMixin"
+    "ServerInteractionManagerMixin",
+    "ServerPlayerAccessor"
   ],
   "client": [
     "ClientPlayerAccessor",
     "InGameHudAccessor",
     "InteractionManagerMixin",
+    "ItemRendererMixin",
     "PlayerInventoryMixin"
   ],
   "injectors": {
