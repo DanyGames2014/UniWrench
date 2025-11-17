@@ -1,1 +1,1 @@
-* Fix wrench left click not resetting delays
+* Add wrench mode switch locking
