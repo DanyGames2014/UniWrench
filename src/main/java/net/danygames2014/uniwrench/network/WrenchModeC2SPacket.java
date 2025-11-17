@@ -13,6 +13,7 @@ import net.minecraft.network.packet.Packet;
 import net.modificationstation.stationapi.api.network.packet.ManagedPacket;
 import net.modificationstation.stationapi.api.network.packet.PacketType;
 import net.modificationstation.stationapi.api.util.Identifier;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.DataInputStream;
@@ -67,7 +68,16 @@ public class WrenchModeC2SPacket extends Packet implements ManagedPacket<WrenchM
         ServerPlayerEntity player = accessor.getServerPlayer();
 
         ItemStack stack = player.inventory.main[this.slot];
-        if (stack != null && stack.getItem() instanceof WrenchBase wrench) {
+        if (stack == null) {
+            return;
+        }
+        
+        if (stack.getItem() instanceof WrenchBase wrench) {
+            if (wrench.isModeSwitchLocked(stack)) {
+                UniWrench.LOGGER.warn("Player {} sent a packet to change a wrench mode when wrench was locked", player.name);
+                return;
+            }
+            
             wrench.setWrenchMode(stack, this.wrenchMode);
         }
     }

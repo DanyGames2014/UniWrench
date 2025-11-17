@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     private final ArrayList<WrenchMode> wrenchModes;
     public int usageDelay;
+    public boolean modeSwitchLocked;
 
     public WrenchBase(Identifier identifier) {
         super(identifier);
@@ -40,6 +41,10 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     @Environment(EnvType.CLIENT)
     public void cycleWrenchMode(ItemStack itemStack, int direction, PlayerEntity player) {
         if (this.wrenchModes == null || this.wrenchModes.isEmpty()) {
+            return;
+        }
+        
+        if (this.isModeSwitchLocked(itemStack)) {
             return;
         }
 
@@ -259,5 +264,51 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
 
     public void setDelay(ItemStack itemStack, int delay) {
         itemStack.getStationNbt().putInt("delay", delay);
+    }
+
+    /**
+     * Sets the Mode Switch Lock value on the wrench Item, this will only govern the default lock position
+     * of any wrench made out of this Item.
+     * Use the methods which take in ItemStack for manipulating individual wrenches
+     * 
+     * @param modeSwitchLocked The value to set the default lock position to
+     * @return The WrenchBase for chaining
+     */
+    // Mode Lock
+    public WrenchBase setModeSwitchLocked(boolean modeSwitchLocked) {
+        this.modeSwitchLocked = modeSwitchLocked;
+        return this;
+    }
+
+    /**
+     * Get if the mode switch lock is enabled on this wrench.
+     * 
+     * @param stack The wrench stack to fetch the lock state for
+     * @return <code>true</code> if the mode switch lock is enabled
+     */
+    public boolean isModeSwitchLocked(ItemStack stack) {
+        if (!stack.getStationNbt().contains("modeSwitchLocked")) {
+            stack.getStationNbt().putBoolean("modeSwitchLocked", this.modeSwitchLocked);
+        }
+        
+        return stack.getStationNbt().getBoolean("modeSwitchLocked");
+    }
+
+    /**
+     * Lock the mode switch on the wrench
+     * 
+     * @param stack The wrench stack to lock the mode switch on
+     */
+    public void lockModeSwitch(ItemStack stack) {
+        stack.getStationNbt().putBoolean("modeSwitchLocked", true);
+    }
+
+    /**
+     * Unlock the mode switch on the wrench
+     *
+     * @param stack The wrench stack to unlock the mode switch on
+     */
+    public void unlockModeSwitch(ItemStack stack) {
+        stack.getStationNbt().putBoolean("modeSwitchLocked", false);
     }
 }

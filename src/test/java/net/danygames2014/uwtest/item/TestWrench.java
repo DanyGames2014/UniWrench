@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
+import org.checkerframework.framework.qual.IgnoreInWholeProgramInference;
 
 public class TestWrench extends WrenchBase {
     public TestWrench(Identifier identifier) {
@@ -23,6 +24,14 @@ public class TestWrench extends WrenchBase {
 
     @Override
     public boolean wrenchLeftClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
+        if (this.isModeSwitchLocked(stack)) {
+            this.unlockModeSwitch(stack);
+            player.sendMessage("Unlocked");
+        } else {
+            this.lockModeSwitch(stack);
+            player.sendMessage("Locked");
+        }
+        
         System.out.println("Wrench Wand Left Click | Block : " + world.getBlockState(x,y,z).getBlock().getTranslatedName() + " | WrenchMode : " + wrenchMode.identifier);
         return !isSneaking;
     }
