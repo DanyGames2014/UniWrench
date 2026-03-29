@@ -61,6 +61,10 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
     }
 
     public WrenchMode getWrenchMode(ItemStack stack) {
+        if (wrenchModes.isEmpty()) {
+            return WrenchMode.INVALID;
+        }
+        
         return this.wrenchModes.get(this.readMode(stack));
     }
 
@@ -93,6 +97,10 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
         
         Block block = world.getBlockState(x, y, z).getBlock();
         WrenchMode wrenchMode = this.getWrenchMode(stack);
+        
+        if (wrenchMode == WrenchMode.INVALID) {
+            return false;
+        }
 
         // First see if the block has the Wrenchable interface
         if (block instanceof Wrenchable wrenchable) {
@@ -140,6 +148,10 @@ public class WrenchBase extends TemplateItem implements CustomTooltipProvider {
         
         Block block = state.getBlock();
         WrenchMode wrenchMode = this.getWrenchMode(stack);
+        
+        if (wrenchMode == WrenchMode.INVALID) {
+            return false;
+        }
 
         // First see if the block has the Wrenchable interface
         if (block instanceof Wrenchable wrenchable) {
