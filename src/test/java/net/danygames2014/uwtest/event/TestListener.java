@@ -29,12 +29,6 @@ public class TestListener {
 
     public static Item testWrench;
 
-    public static WrenchMode testMode1;
-    public static WrenchMode testMode2;
-    public static WrenchMode testMode3;
-    public static WrenchMode testMode4;
-    public static WrenchMode testMode5;
-
     @EventListener
     public void registerBlock(BlockRegistryEvent event){
         wrenchableBlock = new WrenchableBlock(NAMESPACE.id("wrenchable_block")).setTranslationKey(NAMESPACE,"wrenchable_block").setHardness(1.0F);
@@ -45,26 +39,5 @@ public class TestListener {
     @EventListener
     public void registerItems(ItemRegistryEvent event){
         testWrench = new TestWrench(NAMESPACE.id("test_wrench")).setTranslationKey(NAMESPACE, "test_wrench");
-    }
-
-
-    @EventListener
-    public void registerWrenchModes(WrenchModeRegistryEvent event){
-        testMode1 = new TestWrenchMode(NAMESPACE.id("test_mode_1"));
-        testMode2 = new WrenchMode(NAMESPACE.id("test_mode_2"));
-        testMode3 = new WrenchMode(NAMESPACE.id("test_mode_3"));
-        testMode4 = new WrenchMode(NAMESPACE.id("test_mode_4"));
-        testMode5 = new WrenchMode(NAMESPACE.id("test_mode_5"));
-    }
-    
-    @EventListener
-    public void wrenchableBlock(WrenchableBlockRegisterEvent event){
-        event.registerLeftClickAction(softDependentBlock, ((SoftDependentBlock)softDependentBlock)::wrenchLeftClick);
-        event.registerRightClickAction(softDependentBlock, ((SoftDependentBlock)softDependentBlock)::wrenchRightClick);
-    }
-    
-    @EventListener
-    public void addWrenchModes(UniversalWrenchModeEvent event){
-        event.addWrenchMode(testMode1);
     }
 }

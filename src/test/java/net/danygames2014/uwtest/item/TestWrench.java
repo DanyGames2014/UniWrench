@@ -3,6 +3,7 @@ package net.danygames2014.uwtest.item;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.item.WrenchBase;
 import net.danygames2014.uwtest.event.TestListener;
+import net.danygames2014.uwtest.event.WrenchModeListener;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -14,11 +15,11 @@ public class TestWrench extends WrenchBase {
         super(identifier);
         this.addWrenchMode(WrenchMode.MODE_WRENCH);
         this.addWrenchMode(WrenchMode.MODE_ROTATE);
-        this.addWrenchMode(TestListener.testMode1);
-        this.addWrenchMode(TestListener.testMode2);
-        this.addWrenchMode(TestListener.testMode3);
-        this.addWrenchMode(TestListener.testMode4);
-        this.addWrenchMode(TestListener.testMode5);
+        this.addWrenchMode(WrenchModeListener.testMode1);
+        this.addWrenchMode(WrenchModeListener.testMode2);
+        this.addWrenchMode(WrenchModeListener.testMode3);
+        this.addWrenchMode(WrenchModeListener.testMode4);
+        this.addWrenchMode(WrenchModeListener.testMode5);
         this.usageDelay = 10;
     }
 

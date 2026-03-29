@@ -20,6 +20,9 @@
     "stationapi:event_bus_client": [
     ],
     "stationapi:event_bus_server": [
+    ],
+    "uniwrench:event_bus": [
+      "net.danygames2014.uwtest.event.WrenchModeListener"
     ]
   },
 
