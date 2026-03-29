@@ -10,6 +10,7 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
 
+@SuppressWarnings("unused")
 public class WrenchModeListener {
     @Entrypoint.Namespace
     public static Namespace NAMESPACE;

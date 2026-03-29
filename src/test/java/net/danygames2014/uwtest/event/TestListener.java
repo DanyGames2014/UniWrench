@@ -1,14 +1,9 @@
 package net.danygames2014.uwtest.event;
 
-import net.danygames2014.uniwrench.api.WrenchMode;
-import net.danygames2014.uniwrench.api.event.UniversalWrenchModeEvent;
-import net.danygames2014.uniwrench.api.event.WrenchModeRegistryEvent;
-import net.danygames2014.uniwrench.api.event.WrenchableBlockRegisterEvent;
 import net.danygames2014.uwtest.block.CheeseBlock;
 import net.danygames2014.uwtest.block.SoftDependentBlock;
 import net.danygames2014.uwtest.block.WrenchableBlock;
 import net.danygames2014.uwtest.item.TestWrench;
-import net.danygames2014.uwtest.item.TestWrenchMode;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -17,8 +12,8 @@ import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
-import net.modificationstation.stationapi.api.util.Null;
 
+@SuppressWarnings("unused")
 public class TestListener {
     @Entrypoint.Namespace
     public static Namespace NAMESPACE;
