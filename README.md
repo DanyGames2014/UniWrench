@@ -11,13 +11,13 @@ First you need to import the mod into your gradle workspace by adding a dependen
 In build.gradle in dependencies add the following :
 ```
 dependencies {
-  modImplementation("com.github.DanyGames2014:UniWrench:${project.uniwrench_version}")
+  modImplementation("net.danygames2014:UniWrench:${project.uniwrench_version}")
 }
 ```
 
 In gradle.properties (this is not needed but generally advised to configure your version in here)
 ```
-uniwrench_version=1.2.0
+uniwrench_version=2.8.0
 ```
 ### Adding your own wrench mode
 To add your own wrench mode, listen to the `WrenchModeRegistryEvent` and create a new instance of `WrenchMode`.
